@@ -1,19 +1,87 @@
 {
     "paging": {
         "is_end": false,
-        "totals": 2112345,
-        "previous": "https://www.zhihu.com/members/zhang-jia-wei/followers?limit=20&offset=0",
+        "totals": 2112349,
+        "previous": "https://www.zhihu.com/members/zhang-jia-wei/followers?includes=answer_count%2Carticles_count%2Cgender%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F%28type%3Dbest_answerer%29%5D.topics&limit=20&offset=0",
         "is_start": false,
-        "next": "https://www.zhihu.com/members/zhang-jia-wei/followers?limit=20&offset=40"
+        "next": "https://www.zhihu.com/members/zhang-jia-wei/followers?includes=answer_count%2Carticles_count%2Cgender%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F%28type%3Dbest_answerer%29%5D.topics&limit=20&offset=40"
     },
     "data": [
         {
-            "avatar_url_template": "https://pic2.zhimg.com/v2-b33850dea333e5dd5fa27333e572f7c9_{size}.jpg",
+            "avatar_url_template": "https://pic3.zhimg.com/v2-002dd9b5258a5030730db73d0b3df6ba_{size}.jpg",
+            "name": "Cheremer",
+            "url": "https://www.zhihu.com/people/38670e676dbb7b4dc3acfe6efcb41d60",
+            "gender": -1,
+            "user_type": "people",
+            "id": "38670e676dbb7b4dc3acfe6efcb41d60",
+            "vip_info": {
+                "is_vip": false
+            },
+            "is_advertiser": false,
+            "avatar_url": "https://pic3.zhimg.com/v2-002dd9b5258a5030730db73d0b3df6ba_is.jpg",
+            "is_org": false,
+            "headline": "",
             "type": "people",
+            "url_token": "cheremer"
+        },
+        {
+            "avatar_url_template": "https://pic1.zhimg.com/da8e974dc_{size}.jpg",
+            "name": "日久见人心",
+            "url": "https://www.zhihu.com/people/58702a1161762d291d3793980280efce",
+            "gender": -1,
+            "user_type": "people",
+            "id": "58702a1161762d291d3793980280efce",
+            "vip_info": {
+                "is_vip": false
+            },
+            "is_advertiser": false,
+            "avatar_url": "https://pic1.zhimg.com/da8e974dc_is.jpg",
+            "is_org": false,
+            "headline": "",
+            "type": "people",
+            "url_token": "ri-jiu-jian-ren-xin-2-65"
+        },
+        {
+            "avatar_url_template": "https://pic1.zhimg.com/da8e974dc_{size}.jpg",
+            "name": "无所谓",
+            "url": "https://www.zhihu.com/people/17a9fd7b7f78479315fcd0f1865550c4",
+            "gender": -1,
+            "user_type": "people",
+            "id": "17a9fd7b7f78479315fcd0f1865550c4",
+            "vip_info": {
+                "is_vip": false
+            },
+            "is_advertiser": false,
+            "avatar_url": "https://pic1.zhimg.com/da8e974dc_is.jpg",
+            "is_org": false,
+            "headline": "",
+            "type": "people",
+            "url_token": "wu-suo-wei-84-51"
+        },
+        {
+            "avatar_url_template": "https://pic1.zhimg.com/v2-eb701bbbfaf0ef7542249f6ee424dee0_{size}.jpg",
+            "name": "Ok丹丹",
+            "url": "https://www.zhihu.com/people/aac73c0e1890f4b7c85d3ba5d146b768",
+            "gender": -1,
+            "user_type": "people",
+            "id": "aac73c0e1890f4b7c85d3ba5d146b768",
+            "vip_info": {
+                "is_vip": false
+            },
+            "is_advertiser": false,
+            "avatar_url": "https://pic1.zhimg.com/v2-eb701bbbfaf0ef7542249f6ee424dee0_is.jpg",
+            "is_org": false,
+            "headline": "",
+            "type": "people",
+            "url_token": "okdan-dan"
+        },
+        {
+            "avatar_url_template": "https://pic2.zhimg.com/v2-b33850dea333e5dd5fa27333e572f7c9_{size}.jpg",
             "name": "刀刀",
             "url": "https://www.zhihu.com/people/495f3c7be96045fb3b7c12c539a490b6",
             "gender": -1,
             "user_type": "people",
+            "id": "495f3c7be96045fb3b7c12c539a490b6",
             "vip_info": {
                 "is_vip": false
             },
@@ -21,16 +89,16 @@
             "avatar_url": "https://pic2.zhimg.com/v2-b33850dea333e5dd5fa27333e572f7c9_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "dao-dao-33-15",
-            "id": "495f3c7be96045fb3b7c12c539a490b6"
+            "type": "people",
+            "url_token": "dao-dao-33-15"
         },
         {
             "avatar_url_template": "https://pic3.zhimg.com/v2-4ce9e5989856a9d2c450bffe536f6dce_{size}.jpg",
-            "type": "people",
             "name": "愚默",
             "url": "https://www.zhihu.com/people/6489fb3e02182b9052a6c404c69d2170",
             "gender": -1,
             "user_type": "people",
+            "id": "6489fb3e02182b9052a6c404c69d2170",
             "vip_info": {
                 "is_vip": false
             },
@@ -38,16 +106,16 @@
             "avatar_url": "https://pic3.zhimg.com/v2-4ce9e5989856a9d2c450bffe536f6dce_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "yu-mo-86-73-97",
-            "id": "6489fb3e02182b9052a6c404c69d2170"
+            "type": "people",
+            "url_token": "yu-mo-86-73-97"
         },
         {
             "avatar_url_template": "https://pic2.zhimg.com/v2-aaa7a017df43c6012e49c30e272784f9_{size}.jpg",
-            "type": "people",
             "name": "牧场吖",
             "url": "https://www.zhihu.com/people/7cc56ae2fbbcd6b68d5ddde896398c76",
             "gender": -1,
             "user_type": "people",
+            "id": "7cc56ae2fbbcd6b68d5ddde896398c76",
             "vip_info": {
                 "is_vip": false
             },
@@ -55,16 +123,16 @@
             "avatar_url": "https://pic2.zhimg.com/v2-aaa7a017df43c6012e49c30e272784f9_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "mu-chang-a",
-            "id": "7cc56ae2fbbcd6b68d5ddde896398c76"
+            "type": "people",
+            "url_token": "mu-chang-a"
         },
         {
             "avatar_url_template": "https://pic4.zhimg.com/v2-b5f86456fcc09d17649d6ce596d573e7_{size}.jpg",
-            "type": "people",
             "name": "BEYOND",
             "url": "https://www.zhihu.com/people/3da4f01bddbc814f2474f22c7719f4fb",
             "gender": -1,
             "user_type": "people",
+            "id": "3da4f01bddbc814f2474f22c7719f4fb",
             "vip_info": {
                 "is_vip": false
             },
@@ -72,16 +140,16 @@
             "avatar_url": "https://pic4.zhimg.com/v2-b5f86456fcc09d17649d6ce596d573e7_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "beyond-15-42-76",
-            "id": "3da4f01bddbc814f2474f22c7719f4fb"
+            "type": "people",
+            "url_token": "beyond-15-42-76"
         },
         {
             "avatar_url_template": "https://pic1.zhimg.com/da8e974dc_{size}.jpg",
-            "type": "people",
             "name": "初醒",
             "url": "https://www.zhihu.com/people/51f25968e049631bcd0f0f48620d7158",
             "gender": -1,
             "user_type": "people",
+            "id": "51f25968e049631bcd0f0f48620d7158",
             "vip_info": {
                 "is_vip": false
             },
@@ -89,16 +157,16 @@
             "avatar_url": "https://pic1.zhimg.com/da8e974dc_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "chu-xing-34-78",
-            "id": "51f25968e049631bcd0f0f48620d7158"
+            "type": "people",
+            "url_token": "chu-xing-34-78"
         },
         {
             "avatar_url_template": "https://pic2.zhimg.com/v2-a71ccd019d4674e1c979c4d7698990ad_{size}.jpg",
-            "type": "people",
             "name": "感动不敢动",
             "url": "https://www.zhihu.com/people/7ab2c3f7bb514498e70ab02ed8b8f848",
             "gender": -1,
             "user_type": "people",
+            "id": "7ab2c3f7bb514498e70ab02ed8b8f848",
             "vip_info": {
                 "is_vip": false
             },
@@ -106,16 +174,16 @@
             "avatar_url": "https://pic2.zhimg.com/v2-a71ccd019d4674e1c979c4d7698990ad_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "gan-dong-bu-gan-dong-45",
-            "id": "7ab2c3f7bb514498e70ab02ed8b8f848"
+            "type": "people",
+            "url_token": "gan-dong-bu-gan-dong-45"
         },
         {
             "avatar_url_template": "https://pic2.zhimg.com/v2-c0267fba6ee1014e6a100c9a9020a23d_{size}.jpg",
-            "type": "people",
             "name": "小麦小麦",
             "url": "https://www.zhihu.com/people/a5b91b28d5f84fdcfbd97f44f038f647",
             "gender": -1,
             "user_type": "people",
+            "id": "a5b91b28d5f84fdcfbd97f44f038f647",
             "vip_info": {
                 "is_vip": false
             },
@@ -123,16 +191,16 @@
             "avatar_url": "https://pic2.zhimg.com/v2-c0267fba6ee1014e6a100c9a9020a23d_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "xiao-mai-xiao-mai-74",
-            "id": "a5b91b28d5f84fdcfbd97f44f038f647"
+            "type": "people",
+            "url_token": "xiao-mai-xiao-mai-74"
         },
         {
             "avatar_url_template": "https://pic1.zhimg.com/da8e974dc_{size}.jpg",
-            "type": "people",
             "name": "浩瀚星海",
             "url": "https://www.zhihu.com/people/83f69eb7a98d4f9e5bb123b227ca31c4",
             "gender": -1,
             "user_type": "people",
+            "id": "83f69eb7a98d4f9e5bb123b227ca31c4",
             "vip_info": {
                 "is_vip": false
             },
@@ -140,16 +208,16 @@
             "avatar_url": "https://pic1.zhimg.com/da8e974dc_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "hao-han-xing-hai-99",
-            "id": "83f69eb7a98d4f9e5bb123b227ca31c4"
+            "type": "people",
+            "url_token": "hao-han-xing-hai-99"
         },
         {
             "avatar_url_template": "https://pic3.zhimg.com/v2-4d62116a1766046ebb1093517d9b3e12_{size}.jpg",
-            "type": "people",
             "name": "大胖砸的小胖砸",
             "url": "https://www.zhihu.com/people/c2af80fc296b711be0c3a92c18a00000",
             "gender": -1,
             "user_type": "people",
+            "id": "c2af80fc296b711be0c3a92c18a00000",
             "vip_info": {
                 "is_vip": false
             },
@@ -157,16 +225,16 @@
             "avatar_url": "https://pic3.zhimg.com/v2-4d62116a1766046ebb1093517d9b3e12_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "da-pang-za-de-xiao-pang-za",
-            "id": "c2af80fc296b711be0c3a92c18a00000"
+            "type": "people",
+            "url_token": "da-pang-za-de-xiao-pang-za"
         },
         {
             "avatar_url_template": "https://pic2.zhimg.com/v2-18359e471ab52ced8a77482fcfeee671_{size}.jpg",
-            "type": "people",
             "name": "忧桑少年很怀旧",
             "url": "https://www.zhihu.com/people/727cf7475de61853816b46a75c010240",
             "gender": -1,
             "user_type": "people",
+            "id": "727cf7475de61853816b46a75c010240",
             "vip_info": {
                 "is_vip": false
             },
@@ -174,16 +242,16 @@
             "avatar_url": "https://pic2.zhimg.com/v2-18359e471ab52ced8a77482fcfeee671_is.jpg",
             "is_org": false,
             "headline": "学生",
-            "url_token": "you-sang-shao-nian-hen-huai-jiu",
-            "id": "727cf7475de61853816b46a75c010240"
+            "type": "people",
+            "url_token": "you-sang-shao-nian-hen-huai-jiu"
         },
         {
             "avatar_url_template": "https://pic1.zhimg.com/v2-9e8bf00878016702642852bfe5203454_{size}.jpg",
-            "type": "people",
             "name": "巴黎夜雨",
             "url": "https://www.zhihu.com/people/88de8098b7992298a57906a1d33c354b",
             "gender": -1,
             "user_type": "people",
+            "id": "88de8098b7992298a57906a1d33c354b",
             "vip_info": {
                 "is_vip": false
             },
@@ -191,16 +259,16 @@
             "avatar_url": "https://pic1.zhimg.com/v2-9e8bf00878016702642852bfe5203454_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "ba-li-ye-yu-42-66",
-            "id": "88de8098b7992298a57906a1d33c354b"
+            "type": "people",
+            "url_token": "ba-li-ye-yu-42-66"
         },
         {
             "avatar_url_template": "https://pic1.zhimg.com/da8e974dc_{size}.jpg",
-            "type": "people",
             "name": "老虎",
             "url": "https://www.zhihu.com/people/fc6a80fc0ee91f94d28a490d2f8d61b6",
             "gender": -1,
             "user_type": "people",
+            "id": "fc6a80fc0ee91f94d28a490d2f8d61b6",
             "vip_info": {
                 "is_vip": false
             },
@@ -208,16 +276,16 @@
             "avatar_url": "https://pic1.zhimg.com/da8e974dc_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "lao-hu-21-36",
-            "id": "fc6a80fc0ee91f94d28a490d2f8d61b6"
+            "type": "people",
+            "url_token": "lao-hu-21-36"
         },
         {
             "avatar_url_template": "https://pic2.zhimg.com/v2-2634e2d56555f02c5dfd595f5cbd9fd9_{size}.jpg",
-            "type": "people",
             "name": "囚徒的平行世界",
             "url": "https://www.zhihu.com/people/12b973138ef5bfc950efc70797f159b6",
             "gender": 1,
             "user_type": "people",
+            "id": "12b973138ef5bfc950efc70797f159b6",
             "vip_info": {
                 "is_vip": false
             },
@@ -225,16 +293,16 @@
             "avatar_url": "https://pic2.zhimg.com/v2-2634e2d56555f02c5dfd595f5cbd9fd9_is.jpg",
             "is_org": false,
             "headline": "电影爱好者，微博与微信公众号同用户名",
-            "url_token": "frank-1-4",
-            "id": "12b973138ef5bfc950efc70797f159b6"
+            "type": "people",
+            "url_token": "frank-1-4"
         },
         {
             "avatar_url_template": "https://pic3.zhimg.com/v2-a74bd7fd7cd46f01507b3042198e5b92_{size}.jpg",
-            "type": "people",
             "name": "自由",
             "url": "https://www.zhihu.com/people/220e7cbe11f35fa92c06d8300acc8bbc",
             "gender": -1,
             "user_type": "people",
+            "id": "220e7cbe11f35fa92c06d8300acc8bbc",
             "vip_info": {
                 "is_vip": false
             },
@@ -242,16 +310,16 @@
             "avatar_url": "https://pic3.zhimg.com/v2-a74bd7fd7cd46f01507b3042198e5b92_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "gu-du-41-53",
-            "id": "220e7cbe11f35fa92c06d8300acc8bbc"
+            "type": "people",
+            "url_token": "gu-du-41-53"
         },
         {
             "avatar_url_template": "https://pic1.zhimg.com/v2-39de82da81654794dc4a0769bd8d639c_{size}.jpg",
-            "type": "people",
             "name": "Della",
             "url": "https://www.zhihu.com/people/77a64e5ff0ed984680cb58f276252922",
             "gender": -1,
             "user_type": "people",
+            "id": "77a64e5ff0ed984680cb58f276252922",
             "vip_info": {
                 "is_vip": false
             },
@@ -259,16 +327,16 @@
             "avatar_url": "https://pic1.zhimg.com/v2-39de82da81654794dc4a0769bd8d639c_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "della-42-36",
-            "id": "77a64e5ff0ed984680cb58f276252922"
+            "type": "people",
+            "url_token": "della-42-36"
         },
         {
             "avatar_url_template": "https://pic1.zhimg.com/da8e974dc_{size}.jpg",
-            "type": "people",
             "name": "小小王",
             "url": "https://www.zhihu.com/people/25dad6b2c2298871d8a7d170b3124b49",
             "gender": -1,
             "user_type": "people",
+            "id": "25dad6b2c2298871d8a7d170b3124b49",
             "vip_info": {
                 "is_vip": false
             },
@@ -276,76 +344,8 @@
             "avatar_url": "https://pic1.zhimg.com/da8e974dc_is.jpg",
             "is_org": false,
             "headline": "",
-            "url_token": "xiao-xiao-wang-62-94",
-            "id": "25dad6b2c2298871d8a7d170b3124b49"
-        },
-        {
-            "avatar_url_template": "https://pic3.zhimg.com/v2-00ad9f95ab018bfc14b8cacbf4918576_{size}.jpg",
             "type": "people",
-            "name": "韩鹏",
-            "url": "https://www.zhihu.com/people/cc223ec72d4e1a981ad15ac4a1fb44ec",
-            "gender": -1,
-            "user_type": "people",
-            "vip_info": {
-                "is_vip": false
-            },
-            "is_advertiser": false,
-            "avatar_url": "https://pic3.zhimg.com/v2-00ad9f95ab018bfc14b8cacbf4918576_is.jpg",
-            "is_org": false,
-            "headline": "享受孤独",
-            "url_token": "han-peng-12-99",
-            "id": "cc223ec72d4e1a981ad15ac4a1fb44ec"
-        },
-        {
-            "avatar_url_template": "https://pic1.zhimg.com/da8e974dc_{size}.jpg",
-            "type": "people",
-            "name": "飞天的dgg",
-            "url": "https://www.zhihu.com/people/47d03ae0d263a75afa1cf0ded72c5f93",
-            "gender": -1,
-            "user_type": "people",
-            "vip_info": {
-                "is_vip": false
-            },
-            "is_advertiser": false,
-            "avatar_url": "https://pic1.zhimg.com/da8e974dc_is.jpg",
-            "is_org": false,
-            "headline": "",
-            "url_token": "fei-tian-de-dgg",
-            "id": "47d03ae0d263a75afa1cf0ded72c5f93"
-        },
-        {
-            "avatar_url_template": "https://pic2.zhimg.com/v2-b452f71d438f5a2bb1b92f94a0d77029_{size}.jpg",
-            "type": "people",
-            "name": "雷琦玉",
-            "url": "https://www.zhihu.com/people/e579269988ad7254c9b2705e0455d50f",
-            "gender": -1,
-            "user_type": "people",
-            "vip_info": {
-                "is_vip": false
-            },
-            "is_advertiser": false,
-            "avatar_url": "https://pic2.zhimg.com/v2-b452f71d438f5a2bb1b92f94a0d77029_is.jpg",
-            "is_org": false,
-            "headline": "兴趣宽广",
-            "url_token": "lei-qi-yu-10",
-            "id": "e579269988ad7254c9b2705e0455d50f"
-        },
-        {
-            "avatar_url_template": "https://pic4.zhimg.com/v2-d77175aa718f6160d4b320a4b57a9ebb_{size}.jpg",
-            "type": "people",
-            "name": "Peter",
-            "url": "https://www.zhihu.com/people/96b2b847abdbcfc213c3ea926cf8c2be",
-            "gender": -1,
-            "user_type": "people",
-            "vip_info": {
-                "is_vip": false
-            },
-            "is_advertiser": false,
-            "avatar_url": "https://pic4.zhimg.com/v2-d77175aa718f6160d4b320a4b57a9ebb_is.jpg",
-            "is_org": false,
-            "headline": "",
-            "url_token": "peter-65-63-96",
-            "id": "96b2b847abdbcfc213c3ea926cf8c2be"
+            "url_token": "xiao-xiao-wang-62-94"
         }
     ]
 }

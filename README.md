@@ -35,36 +35,30 @@ Scraping Frameworks:
 
 ### HTML approach
 
-Entry point (User Profile):
-`https://www.zhihu.com/people/{username}`
+Entry Points:
+- User Profile: `https://www.zhihu.com/people/{username}`
+- Followers: `https://www.zhihu.com/people/{username}/followers`
+- Subscriptions: `https://www.zhihu.com/people/zhang-jia-wei/following`
 
-Followers:
-`https://www.zhihu.com/people/{username}/followers`
-
-Subscriptions:
-`https://www.zhihu.com/people/zhang-jia-wei/following`
-
-Paging:
-`https://www.zhihu.com/people/zhang-jia-wei/following?page=2`
+Paging: `https://www.zhihu.com/people/zhang-jia-wei/following?page=2`
 
 
 
 ### API approach
 
-Entry point (User Profile):
-`https://www.zhihu.com/api/v4/members/{username}`
-
-Followers:
-`https://www.zhihu.com/api/v4/members/{username}/followers`
-
-Subscriptions:
-`https://www.zhihu.com/api/v4/members/{username}/followees`
+Entry points:
+- User Profile: `https://www.zhihu.com/api/v4/members/{username}`
+- Followers: `https://www.zhihu.com/api/v4/members/{username}/followers`
+- Subscriptions `https://www.zhihu.com/api/v4/members/{username}/followees`
 
 
-Paging & Options:
+Paging:
 - `limit`: 20 items/page
 - `offset`: starts from 0
-- `include`: extra informations
+
+Options(`include`-> extra informations)
+- Follower includes: `answer_count,articles_count,gender,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics`
+- Subscription includes: `answer_count,articles_count,gender,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics`
 
 
 ## Disclaimer
