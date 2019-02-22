@@ -49,7 +49,7 @@ Paging: `https://www.zhihu.com/people/zhang-jia-wei/following?page=2`
 Entry points:
 - User Profile: `https://www.zhihu.com/api/v4/members/{username}`
 - Followers: `https://www.zhihu.com/api/v4/members/{username}/followers`
-- Subscriptions `https://www.zhihu.com/api/v4/members/{username}/followees`
+- Subscriptions: `https://www.zhihu.com/api/v4/members/{username}/followees`
 
 
 Paging:
@@ -75,9 +75,6 @@ The key ideas are:
 - It will skip seen URLs
 - It will be converging until all URLs are in the list
 
-It's impossible to store all urls in MEMORY in one run,
-because that'll take **92GB**.
-
 
 ### `INFO_EXTRACTOR.py`
 
@@ -86,9 +83,14 @@ because that'll take **92GB**.
 
 Storage of URLs:
 - The data takes 44.99604 byte/url, 43 MB/1M urls, 42 GB/1B urls
-- Zhihu.com has 2.2 Billion users, So it'll take 92 GB.
-- ZIP conpression rate: 0.29%, which reduces the whole pack to 0.27GB
+- Zhihu.com has 220 million users, So urls will take 9.2 GB.
+- ZIP conpression rate: 0.29%, which reduces the whole pack to 27MB
 - Database compression rate is similar or even further.
+
+Storage of IDs:
+- No need to store whole url but an unique ID
+- each ID takes 4 byte, 840MB for 220 million IDs.
+- After compression, it'll take much less space, say 4MB.
 
 
 Storage of profile infos:
