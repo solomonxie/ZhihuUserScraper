@@ -23,9 +23,14 @@ import json
 
 import proxyPool
 
+from pymongo import MongoClient
+db_users = MongoClient('mongodb://127.0.0.1:27017').zhihu.users
+
+
 # Initiate entry points
 ids = {'sizhuren'}
 
+proxy = proxyPool.get_proxy()
 
 # Load login info
 with open('/tmp/headers.json', 'r') as f:
@@ -33,44 +38,52 @@ with open('/tmp/headers.json', 'r') as f:
 
 # Get his subscriptions
 def get_subscriptions(uid=None, degree=0):
+    global proxy
     url = 'https://www.zhihu.com/api/v4/members/{}/followees'.format(uid)
     # url = 'https://www.zhihu.com/api/v4/members/{}/followers'.format(uid)
     total = 20
-    # Paging
     offset = 0
-    proxy = proxyPool.get_valid_proxy()
+
+    # Paging Loop
     while offset <= total:
         try:
             params = {'limit':20, 'offset':offset, 'include':'data[*].answer_count,articles_count,gender,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics'}
             headers['referer'] = '{}?page={}'.format(url, round(offset/20+1))
-            r = requests.get(url, params=params, headers=headers, proxies=proxy, timeout=10)
-            time.sleep( random.random()*100%2 )
+            r = requests.get(url, params=params, headers=headers, proxies=proxy, timeout=5)
+            # time.sleep( random.random()*100%2 )
             if r.status_code != 200:
                 print('[RESP]', r.status_code)
-                proxy = proxyPool.get_valid_proxy()
+                proxy = proxyPool.get_proxy()
                 continue
         except Exception as e:
             print( '[ERR:requests]', e, '\n', url, params, headers)
-            proxy = proxyPool.get_valid_proxy()
-            break
+            proxy = proxyPool.get_proxy()
+            continue
         try:
             info = r.json()
         except Exception as e:
             print( '[ERR:r.json()]', r.status_code, e )
-            break
+            continue
 
         total = info.get('paging',{}).get('totals', 0)
+        users = info.get('data', [])  # Get 20 sub-ids form this page
         print('{} [{}D] {}/{} {}'.format('\t'*degree, degree, offset, total, url))
 
-        # Get 20 sub-ids form this page
-        for item in info.get('data', []):
+        # In-page Loop
+        for item in users:
             token = item.get('url_token')
-            print( '\t'*(degree+1), token )
-            # Recursively load the sub-ids of this sub-id
-            if token not in ids and degree < 7:
-                get_subscriptions(token, degree+1)
-            # Save the retrived ID when it's "fully" retireved
-            ids.add(token)
+            exists = db_users.find_one({'_id':token})
+            # print( '[RECORD]', exists )
+            if not exists:
+                # Insert data to DB
+                db_users.insert_one({'_id':token})
+                print( '\t'*(degree+1)+'[INSERT]', token )
+
+        # In-page Loop
+        for item in users:
+            if degree<7 :
+                # Dive-in Loop (Recursive) Load the sub-ids of this sub-id
+                get_subscriptions(uid=item.get('url_token'), degree=degree+1)
 
         # Ready for next page
         offset += 20
