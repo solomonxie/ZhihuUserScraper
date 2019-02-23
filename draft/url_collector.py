@@ -21,6 +21,8 @@ import time
 import random
 import json
 
+import proxyPool
+
 # Initiate entry points
 ids = {'sizhuren'}
 
@@ -36,17 +38,20 @@ def get_subscriptions(uid=None, degree=0):
     total = 20
     # Paging
     offset = 0
+    proxy = proxyPool.get_valid_proxy()
     while offset <= total:
         try:
             params = {'limit':20, 'offset':offset, 'include':'data[*].answer_count,articles_count,gender,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics'}
             headers['referer'] = '{}?page={}'.format(url, round(offset/20+1))
-            r = requests.get(url, params=params, headers=headers, timeout=10)
-            time.sleep(1+random.random()*100%3)
+            r = requests.get(url, params=params, headers=headers, proxies=proxy, timeout=10)
+            time.sleep( random.random()*100%2 )
             if r.status_code != 200:
                 print('[RESP]', r.status_code)
+                proxy = proxyPool.get_valid_proxy()
                 continue
         except Exception as e:
             print( '[ERR:requests]', e, '\n', url, params, headers)
+            proxy = proxyPool.get_valid_proxy()
             break
         try:
             info = r.json()
