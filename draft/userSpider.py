@@ -60,7 +60,7 @@ class UserSpider(object):
         # [CONCURRENT] READ "PROFILES" & PREPARE FOR "PAGINGS"
         while self.PROFILE_TASKS:
             threads = []  #THREADING POOL
-            for i in range(10): #LIMIT MAXIMUM THREADING
+            for i in range(20): #LIMIT MAXIMUM THREADING
                 username = self.PROFILE_TASKS.pop(0)  #REMOVE FROM TASK QUEUE
                 threads.append( Thread(target=self.handle_profile, args=(username,)) )
             # RUN THREADS (START) & WAIT UNTIL FINISHED (JOIN)
@@ -70,7 +70,7 @@ class UserSpider(object):
         # [CONCURRENT] COLLECT IDs FROM USER LIST PAGES
         while self.PAGING_TASKS:
             threads = []  #THREADING POOL
-            for i in range(10): #LIMIT MAXIMUM THREADING
+            for i in range(20): #LIMIT MAXIMUM THREADING
                 paging_args = self.PAGING_TASKS.pop(0)   #REMOVE FROM TASK QUEUE
                 threads.append( Thread(target=self.handle_paging, args=(paging_args,)) )
             # RUN THREADS (START) & WAIT UNTIL FINISHED (JOIN)
