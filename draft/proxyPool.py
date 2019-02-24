@@ -22,7 +22,7 @@ def get():
         return ip
     else:  # Retrive when pool's empty
         # Directly yield out proxies without validation
-        return [parse_proxy(p) for p in get_ips(200)]
+        proxies = [parse_proxy(p) for p in get_ips(200)]
         # Validate each IP before return
         # filter_valid()
         # return get()
