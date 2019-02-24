@@ -21,12 +21,15 @@ def get():
         print( '[USING-IP]', ip )
         return ip
     else:  # Retrive when pool's empty
-        filter_valid()
-        return get()
+        # Directly yield out proxies without validation
+        return [parse_proxy(p) for p in get_ips(200)]
+        # Validate each IP before return
+        # filter_valid()
+        # return get()
 
 def filter_valid():
     print('[PROXY] FILTERING VALID IPs.')
-    proxies = [parse_proxy(p) for p in get_ips(10)]
+    proxies = [parse_proxy(p) for p in get_ips(100)]
     threads = []
     for p in proxies:
         # del_invalid(proxies, i)
