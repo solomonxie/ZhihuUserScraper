@@ -13,11 +13,29 @@ def get_ips(count=20):
     except Exception as e:
         print('[ERR] Proxy Pool Server', e)
 
-def delete(proxy):
-    try:
-        r = requests.get(url='http://127.0.0.1:8000/delete?ip={}'.format(proxy['ip']))
-    except Exception as e:
-        print('[ERR] Proxy Pool Server', e)
+
+def get():
+    global proxies
+    if proxies:   # Directly return IP in the pool
+        ip = proxies.pop(0)
+        print( '[USING-IP]', ip )
+        return ip
+    else:  # Retrive when pool's empty
+        filter_valid()
+        return get()
+
+def filter_valid():
+    print('[PROXY] FILTERING VALID IPs.')
+    proxies = [parse_proxy(p) for p in get_ips(10)]
+    threads = []
+    for p in proxies:
+        # del_invalid(proxies, i)
+        threads.append( Thread(target=validate, args=(p,)) )
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    # print('[VALID-IPs]', len(proxies))
 
 def validate(proxy):
     global proxies
@@ -33,18 +51,6 @@ def validate(proxy):
         delete(proxy)
         pass
 
-def filter_valid():
-    proxies = [parse_proxy(p) for p in get_ips(10)]
-    threads = []
-    for p in proxies:
-        # del_invalid(proxies, i)
-        threads.append( Thread(target=validate, args=(p,)) )
-    for t in threads:
-        t.start()
-    for t in threads:
-        t.join()
-    # print('[VALID-IPs]', len(proxies))
-
 
 def parse_proxy(d):
     return {
@@ -52,15 +58,12 @@ def parse_proxy(d):
         'ip': d[0]
     }
 
-def get():
-    global proxies
-    if proxies:   # Directly return IP in the pool
-        ip = proxies.pop(0)
-        print( '[USING-IP]', ip )
-        return ip
-    else:  # Retrive when pool's empty
-        filter_valid()
-        return get()
+
+def delete(proxy):
+    try:
+        r = requests.get(url='http://127.0.0.1:8000/delete?ip={}'.format(proxy['ip']))
+    except Exception as e:
+        print('[ERR] Proxy Pool Server', e)
 
 
 if __name__ == '__main__':

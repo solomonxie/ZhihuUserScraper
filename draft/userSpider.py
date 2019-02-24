@@ -2,6 +2,7 @@ import requests
 import time
 import random
 import json
+import os
 from threading import Thread
 
 import proxyPool
@@ -23,92 +24,94 @@ class UserSpider(object):
     DEPTH = 0
 
     # TASK QUEUES
-    TASKS = ['SatNight']  #(Linear+=Concurrent) For paging requests
+    PROFILE_TASKS = ['sizhuren']  #(Linear+=Concurrent) For paging requests
     DEEPER_TASKS = []  #(Recursive) Tasks to do 1-level deeper
     PAGING_TASKS = []  # [ (ID,Follower_count,Followee_count), (ID,Follower_count,Followee_count) ]
 
     def __init__(self):
-        self.single_core()
+        self.load_tasks()
+        # self.single_core()
+        self.multi_core()
 
     def single_core(self):
         # READ "PROFILES" & PREPARE FOR "PAGINGS"
         print('[START] PROFILES...')
-        while self.TASKS:
-            username = self.TASKS.pop(0)  #REMOVE FROM TASK QUEUE
-            # RETRIVE PROFILE ACCORDING TO HIS ID
-            profile = self.Request(URL_PROFILE.format(username=username))
-            print('[OK] PROFILES', profile['name'])
-            # INSERT PROFILE TO DB
-            DB_USERS.update_one({'_id':username}, {"$set":profile}, upsert=True)
-            c1,c2 = profile['follower_count'], profile['following_count']
-            # GENERATE PAGING URL TASKS (NOT WHOLE URLs YET)
-            self.PAGING_TASKS.append( (username,c1,c2) )
+        while self.PROFILE_TASKS:
+            username = self.PROFILE_TASKS.pop(0)  #REMOVE FROM TASK QUEUE
+            self.handle_profile(username)
 
-        # [PARALLEL] COLLECT IDs FROM USER LIST PAGES
+        # COLLECT IDs FROM USER LIST PAGES
         print('[START] PAGINGS...')
         while self.PAGING_TASKS:
-            paging = self.PAGING_TASKS.pop(0)   #REMOVE FROM TASK QUEUE
-            for url in self.gen_paginations( *paging ):
-                jsondata = self.Request(url)
-                user_list = jsondata.get('data')
-                print('[PAGING]', len(user_list), len(self.DEEPER_TASKS), paging, url)
-                # APPEND TO DEEPER TASK LIST FOR NEXT RUN
-                self.DEEPER_TASKS += [ u['url_token'] for u in user_list ]
-            print('[OK] PAGINGS', paging)
+            paging_args = self.PAGING_TASKS.pop(0)   #REMOVE FROM TASK QUEUE
+            self.handle_paging(paging_args)
 
         # [RECURSIVE] READY FOR DEEPER LEVEL
         if self.DEEPER_TASKS:
             # PROMOTE SUB-TASKS TO CURRENT-TASKS
-            self.TASKS, self.DEEPER_TASKS = self.DEEPER_TASKS, []
-            # DIVE IN TO DEEPER DEPTH
+            self.PROFILE_TASKS, self.DEEPER_TASKS = self.DEEPER_TASKS, []
+            self.dump_tasks()  # BACKUP CURRENT PROCESS FOR UNEXPECTED EXIT
+            # DIVE INTO DEEPER DEPTH
             self.DEPTH+=1
-            print('[D-{}] TASKS:{} DEEPER:{}'.format(self.DEPTH,len(self.TASKS), len(self.DEEPER_TASKS)))
             self.single_core()
 
 
     def multi_core(self):
-        threads = []
-        # READ "PROFILES" & PREPARE FOR "PAGINGS"
-        while self.TASKS:
-            username = self.TASKS.pop(0)  #REMOVE FROM TASK QUEUE
-            threads.append( Thread(target=self.handle_profile, args=(username,)) )
-        # RUN THREADS (START) & WAIT UNTIL FINISHED (JOIN)
-        s = [t.start() for t in threads]
-        j = [t.join() for t in threads]
-        threads = []  #CLEAR THREADS POOL
+        # [CONCURRENT] READ "PROFILES" & PREPARE FOR "PAGINGS"
+        while self.PROFILE_TASKS:
+            threads = []  #THREADING POOL
+            for i in range(10): #LIMIT MAXIMUM THREADING
+                username = self.PROFILE_TASKS.pop(0)  #REMOVE FROM TASK QUEUE
+                threads.append( Thread(target=self.handle_profile, args=(username,)) )
+            # RUN THREADS (START) & WAIT UNTIL FINISHED (JOIN)
+            s = [t.start() for t in threads]
+            j = [t.join() for t in threads]
 
-        # [PARALLEL] COLLECT IDs FROM USER LIST PAGES
+        # [CONCURRENT] COLLECT IDs FROM USER LIST PAGES
         while self.PAGING_TASKS:
-            paging_args = self.PAGING_TASKS.pop(0)   #REMOVE FROM TASK QUEUE
-            threads.append( Thread(target=self.handle_paging, args=(paging_args,)) )
-        # RUN THREADS (START) & WAIT UNTIL FINISHED (JOIN)
-        s = [t.start() for t in threads]
-        j = [t.join() for t in threads]
-        threads = []  #CLEAR THREADS POOL
+            threads = []  #THREADING POOL
+            for i in range(10): #LIMIT MAXIMUM THREADING
+                paging_args = self.PAGING_TASKS.pop(0)   #REMOVE FROM TASK QUEUE
+                threads.append( Thread(target=self.handle_paging, args=(paging_args,)) )
+            # RUN THREADS (START) & WAIT UNTIL FINISHED (JOIN)
+            s = [t.start() for t in threads]
+            j = [t.join() for t in threads]
 
         # [RECURSIVE] READY FOR DEEPER LEVEL
         if self.DEEPER_TASKS:
+            # PROMOTE SUB-TASKS TO CURRENT-TASKS
+            self.PROFILE_TASKS, self.DEEPER_TASKS = self.DEEPER_TASKS, []
+            self.dump_tasks()  # BACKUP CURRENT PROCESS FOR UNEXPECTED EXIT
+            # DIVE INTO DEEPER DEPTH
+            self.DEPTH+=1
             self.multi_core()
 
 
     def handle_profile(self, username):
-        username = self.TASKS.pop(0)  #REMOVE FROM TASK QUEUE
-        # RETRIVE PROFILE ACCORDING TO HIS ID
-        profile = self.Request(URL_PROFILE.format(username=username))
-        # INSERT PROFILE TO DB
-        DB_USERS.update_one({'_id':username}, {"$set":profile}, upsert=True)
-        c1,c2 = profile['follower_count'], profile['following_count']
+        exists = DB_USERS.find_one({'_id':username})
+        if not exists:
+            # RETRIVE PROFILE ACCORDING TO HIS ID
+            profile = self.Request(URL_PROFILE.format(username=username))
+            print('[OK] PROFILE', profile['name'])
+            # INSERT PROFILE TO DB
+            DB_USERS.update_one({'_id':username}, {"$set":profile}, upsert=True)
+            c1,c2 = profile['follower_count'], profile['following_count']
+        else:
+            c1,c2 = exists['follower_count'], exists['following_count']
         # GENERATE PAGING URL TASKS (NOT WHOLE URLs YET)
         self.PAGING_TASKS.append( (username,c1,c2) )
 
-
     def handle_paging(self, paging):
-        paging_args = self.PAGING_TASKS.pop(0)   #REMOVE FROM TASK QUEUE
-        for url in self.gen_paginations( *paging_args ):
+        for url in self.gen_paginations( *paging ):
             jsondata = self.Request(url)
-            user_list = jsondata.get('data')
-            # APPEND IDs TO DEEPER TASK LIST FOR NEXT RUN
+            if not jsondata:
+                self.PAGING_TASKS[:0] = [paging]  #PUT BACK FAILED PAGE
+                continue
+            user_list = jsondata.get('data',[])
+            print('[PAGING]', paging, len(user_list))
+            # APPEND TO DEEPER TASK LIST FOR NEXT RUN
             self.DEEPER_TASKS += [ u['url_token'] for u in user_list ]
+        print('[OK] PAGINGS', paging)
 
 
     def gen_paginations(self, username, follower_count, followee_count):
@@ -119,30 +122,70 @@ class UserSpider(object):
             yield URL_FOLLOWER.format(username=username, offset=offset)
 
     def Request(self, url, callback={}):
-        print('\t[REQ]', url, '\n')
         try:
-            # response = requests.get(url, headers=HEADERS, proxies=self.PROXY, timeout=2)
-            response = requests.get(url, headers=HEADERS, timeout=2)
-            time.sleep( random.random()*100%4 )
+            # response = requests.get(url, headers=HEADERS, timeout=2)
+            response = requests.get(url, headers=HEADERS, proxies=self.PROXY, timeout=2)
+            time.sleep( random.random()*100%2 )
             if response.status_code != 200:
                 print('[ERR:response]', response.status_code)
                 # proxyPool.delete(self.PROXY)
-                # self.PROXY = proxyPool.get()
+                self.PROXY = proxyPool.get()
                 self.Request(url, callback)
             try:
-                if callback:  # REFERENCE VARIABLE, FOR RETURN VALUE IN THREAD
-                    callback({'profile':response.json()})
-                else:
-                    return response.json()
+                jsondata = response.json()
+                if jsondata.get('error'):
+                    print(jsondata)
+                    self.PROXY = proxyPool.get()
+                    self.Request(url, callback)
             except Exception as e:
                 print( '[ERR] Site reponse with invalid JSON\n', response.text )
-                # self.PROXY = proxyPool.get()
+                self.PROXY = proxyPool.get()
                 self.Request(url, callback)
+                return None
         except Exception as e:
-            print( '[ERR:requests]', type(e).__name__)
-            # self.PROXY = proxyPool.get()
+            print( '[ERR:request]', type(e).__name__)
+            self.PROXY = proxyPool.get()
             self.Request(url, callback)
+            return None
+        print('\t[D-{}:Req] PROFILES:{}, DEEPER:{}, PAGING:{}, URL: {}\n'.format(
+            self.DEPTH,len(self.PROFILE_TASKS), len(self.DEEPER_TASKS), len(self.PAGING_TASKS), url
+        ))
+        # ===> SUCCESSFULLY RETRIVED JSON DATA <====
+        self.dump_tasks()  # BACKUP CURRENT PROCESS FOR UNEXPECTED EXIT
+        if callback:  # REFERENCE VARIABLE, FOR RETURN VALUE IN THREAD
+            callback({'profile':response.json()})
+        else:
+            return response.json()
 
+
+    def load_tasks(self):
+        if not os.path.exists('./.tasks_dump.json'):
+            return None
+        with open('./.tasks_dump.json', 'r') as f:
+            try:
+                d = json.loads(f.read())
+            except:
+                print('[FAILED] LOADING TASKS')
+                return None
+            # OVERWRITE INITIAL QUEUES
+            self.DEPTH = d['DEPTH']
+            self.PROFILE_TASKS = d['PROFILE_TASKS']
+            self.DEEPER_TASKS = d['DEEPER_TASKS']
+            self.PAGING_TASKS = d['PAGING_TASKS']
+        print('[OK] LOAD TASKS COMPLETE. DEPTH:{}, PROFILES:{}, DEEPER:{}, PAGING:{}'.format(
+            self.DEPTH, len(self.PROFILE_TASKS), len(self.DEEPER_TASKS), len(self.PAGING_TASKS)
+        ))
+
+    def dump_tasks(self):
+        with open('./.tasks_dump.json', 'w') as f:
+            # OVERWRITE
+            f.write(json.dumps({
+                'DEPTH': self.DEPTH,
+                'PROFILE_TASKS': self.PROFILE_TASKS,
+                'DEEPER_TASKS': self.DEEPER_TASKS,
+                'PAGING_TASKS': self.PAGING_TASKS
+            }, ensure_ascii=False))
+        # print('[OK] BACKUP TASKS COMPLETE.')
 
 
 # --------------------[ ENTRANCE ]---------------------------------l
