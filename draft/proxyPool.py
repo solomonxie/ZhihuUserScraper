@@ -16,16 +16,13 @@ def get_ips(count=20):
 
 def get():
     global proxies
-    if proxies:   # Directly return IP in the pool
-        ip = proxies.pop(0)
-        print( '[USING-IP]', ip )
-        return ip
-    else:  # Retrive when pool's empty
-        # Directly yield out proxies without validation
+    if not proxies:
+        # Fill up Proxy Pool
         proxies = [parse_proxy(p) for p in get_ips(200)]
-        # Validate each IP before return
-        # filter_valid()
-        # return get()
+        # filter_valid()  # Validate each IP before return
+    ip = proxies.pop(0)
+    print( '[USING-IP]', ip )
+    return ip
 
 def filter_valid():
     print('[PROXY] FILTERING VALID IPs.')
@@ -63,8 +60,11 @@ def parse_proxy(d):
 
 
 def delete(proxy):
+    if not proxy:
+        return None
     try:
         r = requests.get(url='http://127.0.0.1:8000/delete?ip={}'.format(proxy['ip']))
+        return r.text
     except Exception as e:
         print('[ERR] Proxy Pool Server', e)
 
