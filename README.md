@@ -12,23 +12,40 @@ Scrap User infromations from Zhihu.com.
 
 
 
+## Recursive Concurrency Paradox
+
+
+
+FLOW:
+```
+0-Depth:
+    ROOT -> tasks[0],next[] -> parse_profile(0) => {parse_paging(0)} => tasks[],next[1,2,3] ->
+1-Depth:
+    tasks,next=[],tasks -> tasks[1,2,3], next[] ->
+    parse_profile([1,2,3]) => {parse_paging(tasks)} => tasks[], next[4,5,6,7,8,9,10,11,12]
+```
+
+
+
+
+
 ## Case Strategy
 
-Scraping Flow:
+Scraping Approaches:
+- Official API(JSON) Retriving
+- ~~HTML Parsing~~ (Not necessary!)
+
+Scraping Frameworks:
+- Scrapy
+- None: Simple scripts
+
+~~Scraping Flow:~~
 1. Starts with one or multiple V-User
 2. Retrive his profile Informations
 3. Get all the urls of his `Subscriptions` & `Followers`
 4. Read profile information of each user from the url-list
 5. Repeat step-3
 
-
-Scraping Approaches:
-- Official API(JSON) Retriving
-- HTML Parsing (Not necessary!)
-
-Scraping Frameworks:
-- Scrapy
-- None
 
 
 ## Case Analysis
@@ -67,16 +84,6 @@ Options(`include`-> extra informations)
 
 ## Code Design
 
-### `URL_COLLECTOR.py`
-
-The key ideas are:
-- only one list: urls = []
-- Firstly the spider will spread out in deep
-- It will skip seen URLs
-- It will be converging until all URLs are in the list
-
-
-### `INFO_EXTRACTOR.py`
 
 
 ## Storage

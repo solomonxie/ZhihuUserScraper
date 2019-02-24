@@ -30,7 +30,7 @@ db_users = MongoClient('mongodb://127.0.0.1:27017').zhihu.users
 # Initiate entry points
 ids = {'sizhuren'}
 
-proxy = proxyPool.get_proxy()
+proxy = proxyPool.get()
 
 # Load login info
 with open('/tmp/headers.json', 'r') as f:
@@ -49,25 +49,30 @@ def get_subscriptions(uid=None, degree=0):
         try:
             params = {'limit':20, 'offset':offset, 'include':'data[*].answer_count,articles_count,gender,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics'}
             headers['referer'] = '{}?page={}'.format(url, round(offset/20+1))
-            r = requests.get(url, params=params, headers=headers, proxies=proxy, timeout=5)
-            # time.sleep( random.random()*100%2 )
+            r = requests.get(url, params=params, headers=headers, proxies=proxy, timeout=2)
             if r.status_code != 200:
                 print('[RESP]', r.status_code)
-                proxy = proxyPool.get_proxy()
+                # proxyPool.delete(proxy)
+                proxy = proxyPool.get()
                 continue
         except Exception as e:
-            print( '[ERR:requests]', e, '\n', url, params, headers)
-            proxy = proxyPool.get_proxy()
+            print( '[ERR:requests]', type(e).__name__, '\n', url)
+            proxy = proxyPool.get()
             continue
         try:
             info = r.json()
         except Exception as e:
-            print( '[ERR:r.json()]', r.status_code, e )
+            print( '[ERR] Site reponse with invalid JSON' )
             continue
 
+        # Only pause when the proxy works
+        # time.sleep( random.random()*100%2 )
+
+        etag = r.headers.get('etag')
         total = info.get('paging',{}).get('totals', 0)
         users = info.get('data', [])  # Get 20 sub-ids form this page
-        print('{} [{}D] {}/{} {}'.format('\t'*degree, degree, offset, total, url))
+        print('[{}D] {}/{} {}'.format(degree, offset, total, url))
+        # print('{} [{}D] {}/{} {}'.format('\t'*degree, degree, offset, total, url))
 
         # In-page Loop
         for item in users:
@@ -76,7 +81,7 @@ def get_subscriptions(uid=None, degree=0):
             # print( '[RECORD]', exists )
             if not exists:
                 # Insert data to DB
-                db_users.insert_one({'_id':token})
+                db_users.insert_one({'_id':token, 'followee_etag':etag})
                 print( '\t'*(degree+1)+'[INSERT]', token )
 
         # In-page Loop
