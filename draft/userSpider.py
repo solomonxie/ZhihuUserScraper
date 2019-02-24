@@ -128,7 +128,7 @@ class UserSpider(object):
             time.sleep( random.random()*100%2 )
             if response.status_code != 200:
                 print('[ERR:response]', response.status_code)
-                # proxyPool.delete(self.PROXY)
+                proxyPool.delete(self.PROXY)
                 self.PROXY = proxyPool.get()
                 self.Request(url, callback)
             try:
