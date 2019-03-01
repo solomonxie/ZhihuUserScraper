@@ -32,28 +32,38 @@ class UserSpider(object):
 
     def __init__(self):
         self.load_tasks()
-        self.multi_core()
+        self.single_core()
 
-    def multi_core(self):
-        # [CONCURRENT] READ "PROFILES" & PREPARE FOR "PAGINGS"
+    def single_core(self):
+        # READ "PROFILES" & PREPARE FOR "PAGINGS"
+        print('[START] PROFILES...')
         while self.PROFILE_TASKS:
-            threads = []  #THREADING POOL
-            for i in range(self.MAX_THREADS): #LIMIT MAXIMUM THREADING
-                username = self.PROFILE_TASKS.pop(0)  #REMOVE FROM TASK QUEUE
-                threads.append(Thread(target=self.handle_profile, args=(username,), daemon=True))
-            # RUN THREADS (START) & WAIT UNTIL FINISHED (JOIN)
-            s = [t.start() for t in threads]
-            j = [t.join() for t in threads]
+            username = self.PROFILE_TASKS.pop(0)  #REMOVE FROM TASK QUEUE
+            exists = DB_USERS.find_one({'_id':username})
+            # RETRIVE PROFILE ACCORDING TO HIS ID
+            profile = self.Request(URL_PROFILE.format(username=username))
+            print('[OK] PROFILE', profile['name'])
+            # INSERT PROFILE TO DB
+            DB_USERS.update_one({'_id':username}, {"$set":profile}, upsert=True)
+            # GET FOLLOWER & FOLLOWEE NUMBERS FOR GENERATING PAGINGS
+            c1,c2 = profile['follower_count'], profile['following_count']
+            # GENERATE PAGING URL TASKS (NOT WHOLE URLs YET)
+            self.PAGING_TASKS.append((username,c1,c2))
 
-        # [CONCURRENT] COLLECT IDs FROM USER LIST PAGES
+        # COLLECT IDs FROM USER LIST PAGES
+        print('[START] PAGINGS...')
         while self.PAGING_TASKS:
-            threads = []  #THREADING POOL
-            for i in range(self.MAX_THREADS): #LIMIT MAXIMUM THREADING
-                paging_args = self.PAGING_TASKS.pop(0)   #REMOVE FROM TASK QUEUE
-                threads.append(Thread(target=self.handle_paging, args=(paging_args,), daemon=True))
-            # RUN THREADS (START) & WAIT UNTIL FINISHED (JOIN)
-            s = [t.start() for t in threads]
-            j = [t.join() for t in threads]
+            paging = self.PAGING_TASKS.pop(0)   #REMOVE FROM TASK QUEUE
+            for url in self.gen_paginations(*paging):
+                jsondata = self.Request(url)
+                if not jsondata:
+                    self.PAGING_TASKS[:0] = [paging]  #PUT BACK FAILED PAGE
+                    continue
+                user_list = jsondata.get('data',[])
+                print('[PAGING]', paging, len(user_list))
+                # APPEND TO DEEPER TASK LIST FOR NEXT RUN
+                self.DEEPER_TASKS += [ u['url_token'] for u in user_list ]
+            print('[OK] PAGINGS', paging)
 
         # [RECURSIVE] READY FOR DEEPER LEVEL
         if self.DEEPER_TASKS:
@@ -62,36 +72,7 @@ class UserSpider(object):
             self.dump_tasks()  # BACKUP CURRENT PROCESS FOR UNEXPECTED EXIT
             # DIVE INTO DEEPER DEPTH
             self.DEPTH+=1
-            self.multi_core()
-
-
-    def handle_profile(self, username):
-        exists = DB_USERS.find_one({'_id':username})
-        if not exists:
-            # RETRIVE PROFILE ACCORDING TO HIS ID
-            profile = self.Request(URL_PROFILE.format(username=username))
-            print('[OK] PROFILE', profile['name'])
-            # INSERT PROFILE TO DB
-            DB_USERS.update_one({'_id':username}, {"$set":profile}, upsert=True)
-            # GET FOLLOWER & FOLLOWEE NUMBERS FOR GENERATING PAGINGS
-            c1,c2 = profile['follower_count'], profile['following_count']
-        else:
-            c1,c2 = exists['follower_count'], exists['following_count']
-        # GENERATE PAGING URL TASKS (NOT WHOLE URLs YET)
-        self.PAGING_TASKS.append((username,c1,c2))
-
-    def handle_paging(self, paging):
-        for url in self.gen_paginations(*paging):
-            jsondata = self.Request(url)
-            if not jsondata:
-                self.PAGING_TASKS[:0] = [paging]  #PUT BACK FAILED PAGE
-                continue
-            user_list = jsondata.get('data',[])
-            print('[PAGING]', paging, len(user_list))
-            # APPEND TO DEEPER TASK LIST FOR NEXT RUN
-            self.DEEPER_TASKS += [ u['url_token'] for u in user_list ]
-        print('[OK] PAGINGS', paging)
-
+            self.single_core()
 
     def gen_paginations(self, username, follower_count, followee_count):
         # Generate all user-lists (both followers & followees)
@@ -99,6 +80,7 @@ class UserSpider(object):
             yield URL_FOLLOWEE.format(username=username, offset=offset)
         for offset in range(0,follower_count,20):
             yield URL_FOLLOWER.format(username=username, offset=offset)
+
 
     def Request(self, url, callback={}):
         try:
@@ -171,4 +153,5 @@ class UserSpider(object):
 # --------------------[ ENTRANCE ]---------------------------------l
 if __name__ == '__main__':
     UserSpider()
+
 

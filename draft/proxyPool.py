@@ -8,7 +8,7 @@ proxies = []
 
 def get_ips(count=20):
     try:
-        r = requests.get(url='http://127.0.0.1:8000?count={}'.format(count))
+        r = requests.get(url='http://127.0.0.1:8000?type=2&count={}'.format(count))
         return json.loads( r.text )
     except Exception as e:
         print('[ERR] Proxy Pool Server', e)
